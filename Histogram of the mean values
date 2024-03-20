@@ -1,0 +1,27 @@
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Load the CSV file into a pandas DataFrame
+df = pd.read_csv("/Users/adriaanmeyer/PycharmProjects/Meyer Project/Pearson correlation.csv")
+
+# Exclude columns 0, 11, and 12
+df = df.iloc[:, [i for i in range(len(df.columns)) if i not in [0, 11, 12]]]
+
+# Calculate the mean of each column
+column_means = df.mean()
+
+# Plot a bar plot with the mean values on the y-axis and column names on the x-axis
+plt.figure(figsize=(10, 8))
+bars = plt.bar(column_means.index, column_means, color='skyblue', edgecolor='black')
+plt.title('Mean Values of Columns (Excluding Percentage Plasma Haemolysis)')
+plt.xlabel('Variable Name')
+plt.ylabel('Mean Value')
+plt.xticks(rotation=90)  
+plt.grid(axis='y')
+
+# Add value labels on top of each bar
+for bar in bars:
+    yval = bar.get_height()
+    plt.text(bar.get_x() + bar.get_width() / 2, yval, round(yval, 2), ha='center', va='bottom')
+
+plt.show()

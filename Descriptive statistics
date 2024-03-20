@@ -1,0 +1,7 @@
+import pandas as pd
+
+# Load the CSV file into a pandas DataFrame
+df = pd.read_csv("Meyer Project/MSc CSV Format.csv")
+
+# Display descriptive statistics transposed
+print(df.describe().transpose())

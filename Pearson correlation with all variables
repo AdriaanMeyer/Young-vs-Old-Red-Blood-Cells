@@ -1,0 +1,19 @@
+import pandas as pd
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+# Load the CSV file into a pandas DataFrame
+df = pd.read_csv("/Users/adriaanmeyer/PycharmProjects/Meyer Project/Pearson correlation.csv")
+
+# Selecting the Neocyte and LRBCPS columns
+lrbcps_columns = ['RBC LRBCPS', 'MCV LRBCPS', 'MCHC LRBCPS', 'HB LRBCPS', 'Sodium LRBCPS', 'Plasma Haemolysis LRBCPS']
+neocyte_columns = ['RBC Neocyte', 'MCV Neocyte', 'MCHC Neocyte', 'HB Neocyte', 'Sodium Neocyte', 'Plasma Haemolysis Neocyte']
+
+# Compute the correlation matrix
+correlation_matrix = df[neocyte_columns + lrbcps_columns].corr()
+
+# Plotting the correlation matrix as a heatmap with changed ratio of colors and correlation range
+plt.figure(figsize=(10, 8))
+sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm', fmt=".2f")
+plt.title('Correlation Between Neocyte enriched and Filtered Blood')
+plt.show()

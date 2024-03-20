@@ -1,0 +1,50 @@
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_squared_error
+import matplotlib.pyplot as plt
+from matplotlib.cm import get_cmap
+
+# Load the CSV file
+df = pd.read_csv("/Users/adriaanmeyer/PycharmProjects/Meyer Project/MSc CSV Format.csv")
+
+# Selecting the predictors and target variable
+X = df[['Unit number']]  
+y = df[['Percentage Plasma Haemolysis D1 (Neocytes)', 
+        'Percentage Plasma Haemolysis D14 (Neocytes)', 
+        'Percentage Plasma Haemolysis D28 (Neocytes)',
+        'Percentage Plasma Haemolysis D42 (Neocytes)']]   
+
+# Split the data into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Initialize the Linear Regression model
+model = LinearRegression()
+
+# Fit the model on the training data
+model.fit(X_train, y_train)
+
+# Make predictions on the testing data
+y_pred = model.predict(X_test)
+
+# Calculate Mean Squared Error
+mse = mean_squared_error(y_test, y_pred)
+print("Mean Squared Error:", mse)
+
+# Coefficients and Intercept
+print("Coefficients:", model.coef_)
+print("Intercept:", model.intercept_)
+
+# Define a colormap
+cmap = get_cmap('tab10')
+
+# Plotting the actual vs predicted values for each time point
+for i, day in enumerate(['Day 1', 'Day 14', 'Day 28', 'Day 42']):
+    plt.scatter(y_test.iloc[:, i], y_pred[:, i], color=cmap(i), label=day)
+    plt.plot(y_test.iloc[:, i], y_test.iloc[:, i], color='red', linestyle='--')  # Plotting the diagonal line for reference
+
+plt.title('Red Blood cell count (Neocyte enriched)')
+plt.xlabel('Actual Percentage Plasma Haemolysis')
+plt.ylabel('Predicted Percentage Plasma Haemolysis')
+plt.legend()
+plt.show()
